@@ -43,4 +43,19 @@ public class MyTests {
     public void test4() throws Exception {
         throw new Exception("Some error occurred");
     }
+
+    @Test(name = "Test 5", priority = 5) @Order(10)
+    public void test5() throws Exception {
+        throw new Exception("Some error occurred");
+    }
+
+    @Test(name = "Test 6", priority = 6) @Order(2)
+    public void test6() throws Exception {
+        throw new Exception("Some error occurred");
+    }
+
+//    @Test(name = "Test 7", priority = 7) @Order(2)
+//    public static void test7() throws Exception {
+//        throw new Exception("Some error occurred");
+//    }
 }

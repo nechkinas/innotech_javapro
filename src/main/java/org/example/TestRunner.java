@@ -5,10 +5,7 @@ import org.example.anotation.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TestRunner {
 
@@ -38,24 +35,34 @@ public class TestRunner {
                 }
                 afterSuiteMethod = method;
             } else if (method.isAnnotationPresent(BeforeEach.class)) {
+                if (Modifier.isStatic(method.getModifiers())) {
+                    throw new BadTestClassError("@BeforeEach не может быть применен к статическому методу: " + method.getName());
+                }
                 beforeEachMethods.add(method);
             } else if (method.isAnnotationPresent(AfterEach.class)) {
+                if (Modifier.isStatic(method.getModifiers())) {
+                    throw new BadTestClassError("@AfterEach не может быть применен к статическому методу: " + method.getName());
+                }
                 afterEachMethods.add(method);
             } else if (method.isAnnotationPresent(Test.class)) {
+                if (Modifier.isStatic(method.getModifiers())) {
+                    throw new BadTestClassError("@Test не может быть применен к статическому методу: " + method.getName());
+                }
+                if(method.isAnnotationPresent(Order.class)) {
+                    if (Modifier.isStatic(method.getModifiers())) {
+                        throw new BadTestClassError("@Order не может быть применен к статическому методу: " + method.getName());
+                    }
+                }
                 testMethods.add(method);
             }
         }
 
         // Сортировка тестов по приоритету и имени
-        testMethods.sort((o1, o2) -> {
-            if (o1 != null && o2 != null
-                    && o1.getAnnotation(Test.class) != null && o2.getAnnotation(Test.class) != null
-                    && o1.getAnnotation(Test.class).priority() >= o2.getAnnotation(Test.class).priority()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        testMethods.sort(Comparator
+                .<Method>comparingInt(m -> m.getAnnotation(Test.class).priority()).reversed()
+                .thenComparingInt(m -> m.isAnnotationPresent(Order.class) ? m.getAnnotation(Order.class).value() : 5)
+                .thenComparing(Method::getName)
+        );
 
         // Создание экземпляра класса тестов
         Object testClassInstance;
@@ -88,7 +95,7 @@ public class TestRunner {
                     try {
                         beforeEach.invoke(testClassInstance);
                     } catch (Exception e) {
-                        thrownException = e instanceof Exception ? (Exception) e : new Exception(e);
+                        thrownException = e;
                         result = TestResult.Error;
                         break;
                     }
@@ -106,7 +113,7 @@ public class TestRunner {
                         }
                     } catch (Exception e) {
                         result = TestResult.Error;
-                        thrownException = e instanceof Exception ? (Exception) e : new Exception(e);
+                        thrownException = e;
                     }
                 }
 
@@ -114,7 +121,7 @@ public class TestRunner {
                     try {
                         afterEach.invoke(testClassInstance);
                     } catch (Exception e) {
-                        thrownException = e instanceof Exception ? (Exception) e : new Exception(e);
+                        thrownException = e;
                         result = TestResult.Error;
                     }
                 }
