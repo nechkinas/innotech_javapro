@@ -1,2 +1,0 @@
-# innotech_javapro
-javapro
