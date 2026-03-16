@@ -30,11 +30,11 @@ public class Main {
     public static void main(String[] args) {
         //Найдите в списке целых чисел 3-е наибольшее число (пример: 5 2 10 9 4 3 10 1 13 => 10)
         Stream<Integer> integerStream = Stream.of(5, 2, 10, 9, 4, 3, 10, 1, 13);
-        System.out.println(integerStream.sorted(Comparator.reverseOrder()).limit(3).toList().getLast());
+        System.out.println(integerStream.sorted(Comparator.reverseOrder()).skip(2).findFirst().orElse(0));
 
         //Найдите в списке целых чисел 3-е наибольшее «уникальное» число (пример: 5 2 10 9 4 3 10 1 13 => 9, в отличие от прошлой задачи здесь разные 10 считает за одно число)
         Stream<Integer> integerStream2 = Stream.of(5, 2, 10, 9, 4, 3, 10, 1, 13);
-        System.out.println(integerStream2.distinct().sorted(Comparator.reverseOrder()).limit(3).toList().getLast());
+        System.out.println(integerStream2.distinct().sorted(Comparator.reverseOrder()).skip(2).findFirst().orElse(0));
 
         //Имеется список объектов типа Сотрудник (имя, возраст, должность), необходимо получить список имен 3 самых старших сотрудников с должностью «Инженер», в порядке убывания возраста
         Stream<Emploer> empStream = Stream.of(
@@ -80,8 +80,8 @@ public class Main {
         // Отпечатайте в консоль строки из списка в порядке увеличения длины слова, если слова имеют одинаковую длины, то должен быть сохранен алфавитный порядок
         Stream<String> strStream3 = Stream.of("hellow world","i see world", "and", "sky");
         System.out.println(strStream3
-                .sorted()
-                .sorted(Comparator.comparing(String::length) )
+                .sorted(Comparator.comparingInt(String::length) //  по длине
+                        .thenComparing(Comparator.naturalOrder())) // по алфавиту
                 .toList()
         );
 
@@ -90,9 +90,8 @@ public class Main {
         System.out.println(strStream4
                 .map(s -> s.split(" "))
                 .flatMap(Arrays::stream)
-                .sorted(Comparator.comparing(String::length))
-                .toList()
-                .getLast()
+                .max(Comparator.comparingInt(String::length))
+                .orElse("Список пуст")
         );
 
     }
