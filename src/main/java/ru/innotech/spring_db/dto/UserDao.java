@@ -1,4 +1,4 @@
-package ru.innotech.spring_db;
+package ru.innotech.spring_db.dto;
 
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-class UserDao {
+public class UserDao {
     private final DataSource dataSource;
 
     public UserDao(DataSource dataSource) { this.dataSource = dataSource; }

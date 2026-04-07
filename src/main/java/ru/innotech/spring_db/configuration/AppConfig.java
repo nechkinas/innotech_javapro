@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 
 
 @Configuration
-@ComponentScan("ru.innotech.spring_db")
 @PropertySource("classpath:application.properties")
 public class AppConfig {
     @Bean
