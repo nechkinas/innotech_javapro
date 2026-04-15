@@ -1,15 +1,15 @@
 package ru.innotech.spring_db;
 
-import com.sun.tools.javac.Main;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import ru.innotech.spring_db.service.UserService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-@ComponentScan
+@SpringBootApplication
 public class SpringDbApplication {
 
     public static void main(String[] args) {
+        SpringApplication.run(SpringDbApplication.class);
+        /*
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(SpringDbApplication.class);
 
@@ -26,6 +26,7 @@ public class SpringDbApplication {
         System.out.println("After delete: " + service.getAll());
 
         context.close();
+         */
     }
 
 }

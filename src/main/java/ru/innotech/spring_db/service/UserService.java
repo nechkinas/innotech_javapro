@@ -1,50 +1,33 @@
 package ru.innotech.spring_db.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.innotech.spring_db.dto.User;
-import ru.innotech.spring_db.dto.UserDao;
+import ru.innotech.spring_db.entity.User;
+import ru.innotech.spring_db.repository.UserRepository;
 
-
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private final UserDao userDao;
-
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private final UserRepository userRepository;
 
     public void create(String name) {
-        try {
-            userDao.save(name);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        User user = new User();
+        user.setUserName(name);
+        userRepository.save(user);
     }
 
     public List<User> getAll() {
-        try {
-            return userDao.findAll();
-        } catch (SQLException e) {
-            return List.of();
-        }
+        return userRepository.findAll();
     }
 
-    public User getOne(Long id) {
-        try {
-            return userDao.findById(id);
-        } catch (SQLException e) {
-            return null;
-        }
+    public User getById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     public void remove(Long id) {
-        try {
-            userDao.delete(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        userRepository.deleteById(id);
     }
+
 }
