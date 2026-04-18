@@ -1,19 +1,14 @@
 package ru.innotech.spring_db.controller;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.innotech.spring_db.dto.ProductDto;
-import ru.innotech.spring_db.dto.UserDto;
-import ru.innotech.spring_db.entity.Product;
-import ru.innotech.spring_db.enums.ProductType;
 import ru.innotech.spring_db.service.ProductService;
-import ru.innotech.spring_db.service.UserService;
 
 import java.util.List;
 
-@RestController
+@RestController("/api/v1")
 @RequiredArgsConstructor
 public class ProductsController {
     private final ProductService productService;
