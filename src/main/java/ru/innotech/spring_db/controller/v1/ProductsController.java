@@ -1,4 +1,4 @@
-package ru.innotech.spring_db.controller;
+package ru.innotech.spring_db.controller.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,22 +8,23 @@ import ru.innotech.spring_db.service.ProductService;
 
 import java.util.List;
 
-@RestController("/api/v1")
+@RestController
+@RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
 public class ProductsController {
     private final ProductService productService;
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     public ProductDto getById(@PathVariable Long id) {
         return productService.getDtoById(id);
     }
 
-    @GetMapping("/user/{id}/products")
+    @GetMapping("/user/{id}")
     public List<ProductDto> getDtoByUserId(@PathVariable Long id) {
         return productService.getDtoByUserId(id);
     }
 
-    @PostMapping("/user/{id}/product/{type_product}")
+    @PostMapping("/user/{id}/{type_product}")
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto create(
             @PathVariable Long id,
@@ -32,8 +33,8 @@ public class ProductsController {
         return productService.createDto(typeProduct, id);
     }
 
-    @DeleteMapping("/product/{id}")
-    public void deleteById(@PathVariable Long id) {
+    @DeleteMapping("/{id}/delete")
+    public void deleteById(@PathVariable("id") Long id) {
         productService.remove(id);
     }
 

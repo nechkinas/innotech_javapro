@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class FlywayConfig {
-    @Bean(initMethod = "migrate") // Метод migrate выполнится при создании бина
+    @Bean
     public Flyway flyway(DataSource dataSource) {
         return Flyway.configure()
                 .dataSource(dataSource)

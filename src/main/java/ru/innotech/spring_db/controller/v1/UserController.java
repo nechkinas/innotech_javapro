@@ -1,4 +1,4 @@
-package ru.innotech.spring_db.controller;
+package ru.innotech.spring_db.controller.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,16 +7,17 @@ import ru.innotech.spring_db.dto.UserDto;
 import ru.innotech.spring_db.service.UserService;
 
 @RestController
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public UserDto getById(@PathVariable Long id) {
         return userService.getDtoById(id);
     }
 
-    @PostMapping("/user")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(
             @RequestBody
@@ -25,7 +26,7 @@ public class UserController {
         return userService.createDto(userDto.name());
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}/delete")
     public void deleteById(@PathVariable Long id) {
         userService.remove(id);
     }
